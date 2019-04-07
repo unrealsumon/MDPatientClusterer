@@ -16,9 +16,53 @@ namespace MDPatientClusterer.Business
             int ColumnSize = PatientMatrix.GetLength(1);
             bool[,] VisitedMatrix = new bool[RowSize, ColumnSize];
             VisitedMatrix.Initialize();
-          
+            Dictionary<string, Node> NodeToVisit = new Dictionary<string, Node>();
 
-            return 0;
+            for (int r = 0; r < RowSize; r++)
+            {
+                for (int c = 0; c < ColumnSize; c++)
+                {
+                    if (PatientMatrix[r, c] == 1 && VisitedMatrix[r, c] == false)
+                    {
+                        CheckRight(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
+                        CheckDown(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
+                        CheckLeftBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
+                        CheckRightBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
+
+                        VisitedMatrix[r, c] = true;
+
+
+                        var keys = NodeToVisit.Keys.ToList();
+
+                        for (int i = 0; i < keys.Count; i++)
+                        {
+                            var key = keys[i];
+                            if (NodeToVisit[key].IsVisited == false)
+                            {
+                                CheckLeft(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                    // To check all the cells which are at the left side of current cell
+                                CheckRight(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                   // To check all the cells which are at the right side of current cell
+                                CheckTop(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                     // To check all the cells which are at the top of current cell
+                                CheckDown(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                    // To check all the cells which are at the bottom of current cell
+                                CheckRightBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);       // To check all the cells which are at the right bottom corner of current cell
+                                CheckRightUpperCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);        // To check all the cells which are at the right upper corner of current cell
+                                CheckLeftUpperCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);         // To check all the cells which are at the left bottom corner of current cell    
+                                CheckLeftBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);        // To check all the cells which are at the left upper corner of current cell
+
+                                NodeToVisit[key].IsVisited = true;
+                                VisitedMatrix[NodeToVisit[key].r, NodeToVisit[key].c] = true;
+                                keys = NodeToVisit.Keys.ToList();
+                            }
+                        }
+
+                        ClustCount++;
+
+                    }
+
+                }
+            }
+
+
+            return ClustCount;
         }
 
         private int[,] ConvertJObjectTo2DArray(JObject PatientObj)
