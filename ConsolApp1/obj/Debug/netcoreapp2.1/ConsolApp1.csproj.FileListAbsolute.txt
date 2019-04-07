@@ -1,0 +1,11 @@
+D:\MDPatientClusterer\ConsolApp1\bin\Debug\netcoreapp2.1\ConsolApp1.deps.json
+D:\MDPatientClusterer\ConsolApp1\bin\Debug\netcoreapp2.1\ConsolApp1.runtimeconfig.json
+D:\MDPatientClusterer\ConsolApp1\bin\Debug\netcoreapp2.1\ConsolApp1.runtimeconfig.dev.json
+D:\MDPatientClusterer\ConsolApp1\bin\Debug\netcoreapp2.1\ConsolApp1.dll
+D:\MDPatientClusterer\ConsolApp1\bin\Debug\netcoreapp2.1\ConsolApp1.pdb
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.csproj.CoreCompileInputs.cache
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.AssemblyInfoInputs.cache
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.AssemblyInfo.cs
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.dll
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.pdb
+D:\MDPatientClusterer\ConsolApp1\obj\Debug\netcoreapp2.1\ConsolApp1.csprojAssemblyReference.cache

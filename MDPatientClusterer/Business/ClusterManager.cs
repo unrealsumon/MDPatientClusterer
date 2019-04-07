@@ -9,10 +9,10 @@ namespace MDPatientClusterer.Business
     public class ClusterManager
     {
         //returns the number of clusters in a matrix
-        public int GetClusters(/*JObject PatientObj,*/ int[,] TestMatrix)
+        public int GetClusters(JObject PatientObj/*, int[,] TestMatrix*/)                               // the secon parameter is for unit testing.
         {
-            var PatientMatrix = TestMatrix;                                                             //for testing purpose
-            //var PatientMatrix = ConvertJObjectTo2DArray(PatientObj);                                    // Converting Json Object to 2D array
+            /*var PatientMatrix = TestMatrix; */                                                        //for testing purpose
+            var PatientMatrix = ConvertJObjectTo2DArray(PatientObj);                                    // Converting Json Object to 2D array
             int ClustCount = 0;                                                                         // Cluster counter 
             int RowSize = PatientMatrix.GetLength(0);                                                   
             int ColumnSize = PatientMatrix.GetLength(1);

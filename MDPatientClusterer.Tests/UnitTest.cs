@@ -29,7 +29,7 @@ namespace Tests
                 }
             }
             ClusterManager manager = new ClusterManager();
-            int clusters=manager.GetClusters(matrix3Rand);
+            //int clusters=manager.GetClusters(matrix3Rand);  //for testing
            
         }
     }

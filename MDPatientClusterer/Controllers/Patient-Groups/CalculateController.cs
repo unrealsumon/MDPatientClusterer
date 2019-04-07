@@ -18,10 +18,10 @@ namespace MDPatientClusterer.Controllers.Patient_Groups
         [HttpPost]
         public ActionResult Post([FromBody] JObject jObject)
         {
-            //ClusterManager manager = new ClusterManager();                  //declaring the patient manager class.
-            //int patientGroups = manager.GetClusters(jObject);               //passing the json object to getclusters function to find clusters.
-            //return Ok(new { numberOfGroups = patientGroups });              //returning the result.
-            return Ok();
+            ClusterManager manager = new ClusterManager();                  //declaring the patient manager class.
+            int patientGroups = manager.GetClusters(jObject);               //passing the json object to getclusters function to find clusters.
+            return Ok(new { numberOfGroups = patientGroups });              //returning the result.
+    
         }
     }   
     
