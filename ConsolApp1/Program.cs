@@ -52,6 +52,8 @@ namespace ConsolApp1
             int count = 0;
             int rowLen = p.GetLength(0);
             int colLen = p.GetLength(1);
+            bool[,] visitedMatrix = new bool[rowLen, colLen];
+            visitedMatrix.Initialize();
             List<Node> NodeToVisit = new List<Node>();
 
 
@@ -59,41 +61,41 @@ namespace ConsolApp1
             {
                 for (int c = 0; c < colLen; c++)
                 {
-                    if (p[r, c] == 1)
+                    if (p[r, c] == 1 && visitedMatrix[r, c] == false)
                     {
 
                         var check = NodeToVisit.Where(x => x.index.c == c && x.index.r == r && x.IsVisited == true).FirstOrDefault();
                         if (check == null)
                         {
-                            CheckRight(r, c, p, ref NodeToVisit);
-                            CheckLeft(r, c, p, ref NodeToVisit);
-                            CheckDown(r, c, p, ref NodeToVisit);
-                            CheckUp(r, c, p, ref NodeToVisit);
-                            CheckRightBottomCorner(r, c, p, ref NodeToVisit);
-                            CheckLeftBottomCorner(r, c, p, ref NodeToVisit);
-                            CheckRightUpperCorner(r, c, p, ref NodeToVisit);
-                            CheckLeftUpperCorner(r, c, p, ref NodeToVisit);
-
+                            CheckRight(r, c, p, visitedMatrix, ref NodeToVisit);
+                            CheckDown(r, c, p, visitedMatrix, ref NodeToVisit);
+                            CheckRightBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
+                            CheckLeftBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
+                            visitedMatrix[r, c] = true;
 
                             for (int i = 0; i < NodeToVisit.Count(); i++)
+
                             {
                                 if (NodeToVisit[i].IsVisited == false)
                                 {
-                                    CheckLeft(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
-                                    CheckRight(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
-                                    CheckUp(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
 
-                                    CheckDown(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
-                                    CheckRightBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
-                                    CheckRightUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
-                                    CheckLeftUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckLeft(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                    CheckRight(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                    CheckUp(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
 
-                                    CheckLeftBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckDown(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                    CheckRightBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                    CheckRightUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                    CheckLeftUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+
+                                    CheckLeftBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
                                     NodeToVisit[i].IsVisited = true;
+                                    visitedMatrix[NodeToVisit[i].index.r, NodeToVisit[i].index.c] = true;
+
                                 }
                             }
                             count++;
-
+                            //Console.WriteLine(count);
                         }
 
                     }
@@ -107,14 +109,14 @@ namespace ConsolApp1
 
 
 
-        private static void CheckRight(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        private static void CheckRight(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
 
             for (int i = c + 1; i < colLen; i++)
             {
-                if (p[r, i] == 1)
+                if (p[r, i] == 1 && !IsVisited[r, i])
                 {
                     Index index = new Index();
                     Node aNode = new Node();
@@ -136,14 +138,16 @@ namespace ConsolApp1
         }
 
 
-        private static void CheckLeft(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+
+
+        private static void CheckLeft(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
 
             for (int i = c - 1; i >= 0; i--)
             {
-                if (p[r, i] == 1)
+                if (p[r, i] == 1 && IsVisited[r, i] == false)
                 {
                     Index index = new Index();
                     Node aNode = new Node();
@@ -166,14 +170,15 @@ namespace ConsolApp1
 
 
 
-        private static void CheckDown(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+
+        private static void CheckDown(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
             int rowLen = p.GetLength(0);
 
 
             for (int i = r + 1; i < rowLen; i++)
             {
-                if (p[i, c] == 1)
+                if (p[i, c] == 1 && !IsVisited[i, c])
                 {
                     Index index = new Index();
                     Node aNode = new Node();
@@ -193,14 +198,15 @@ namespace ConsolApp1
                 }
             }
         }
-        private static void CheckUp(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+
+        private static void CheckUp(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
             int rowLen = p.GetLength(0);
 
 
             for (int i = r - 1; i >= 0; i--)
             {
-                if (p[i, c] == 1)
+                if (p[i, c] == 1 && !IsVisited[i, c])
                 {
                     Index index = new Index();
                     Node aNode = new Node();
@@ -222,7 +228,8 @@ namespace ConsolApp1
         }
 
 
-        private static void CheckRightBottomCorner(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+
+        private static void CheckRightBottomCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
@@ -233,7 +240,7 @@ namespace ConsolApp1
                 if (r < rolLen - 1)
                 {
                     r++;
-                    if (p[r, i] == 1)
+                    if (p[r, i] == 1 && !IsVisited[r, i])
                     {
                         Index index = new Index();
                         Node aNode = new Node();
@@ -261,7 +268,7 @@ namespace ConsolApp1
 
 
 
-        private static void CheckLeftBottomCorner(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        private static void CheckLeftBottomCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
@@ -272,7 +279,7 @@ namespace ConsolApp1
                 {
 
                     r++;
-                    if (p[r, i] == 1)
+                    if (p[r, i] == 1 && !IsVisited[r, i])
                     {
                         Index index = new Index();
                         Node aNode = new Node();
@@ -299,7 +306,8 @@ namespace ConsolApp1
         }
 
 
-        private static void CheckRightUpperCorner(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+
+        private static void CheckRightUpperCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
@@ -310,7 +318,7 @@ namespace ConsolApp1
                 if (r > 0)
                 {
                     r--;
-                    if (p[r, i] == 1)
+                    if (p[r, i] == 1 && !IsVisited[r, i])
                     {
                         Index index = new Index();
                         Node aNode = new Node();
@@ -337,7 +345,7 @@ namespace ConsolApp1
         }
 
 
-        private static void CheckLeftUpperCorner(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        private static void CheckLeftUpperCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
@@ -348,7 +356,7 @@ namespace ConsolApp1
                 {
 
                     r--;
-                    if (p[r, i] == 1)
+                    if (p[r, i] == 1 && !IsVisited[r, i])
                     {
                         Index index = new Index();
                         Node aNode = new Node();
