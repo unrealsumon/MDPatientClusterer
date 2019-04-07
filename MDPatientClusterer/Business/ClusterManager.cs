@@ -42,6 +42,31 @@ namespace MDPatientClusterer.Business
         }
 
 
+        //To check all the cells which are at the left side of current cell
+        private void CheckLeft(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
+        {
+
+            for (int c = col - 1; c >= 0; c--)
+            {
+                if (PatientMatrix[row, c] == 1 && IsVisited[row, c] == false)   //if unvisited node found with value 1
+                {
+                    Node aNode = new Node();
+                    aNode.r = row;
+                    aNode.c = c;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();        //creating the dictionary key using the index  
+                    if (NodeToVisit.ContainsKey(aNode.key) == false)            //if not found in NodetoVisit Dictionary
+                    {
+                        aNode.IsVisited = false;
+                        NodeToVisit.Add(aNode.key, aNode);                      //adding to dictionary to visit later.
+                    }
+                }
+                else
+                {
+                    return;                                                     //if no more cells found with value 1 or went through all the cells
+                }
+            }
+        }
+
 
         public class Node
         {
