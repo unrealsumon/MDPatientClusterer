@@ -68,7 +68,7 @@ namespace MDPatientClusterer.Business
         }
 
 
-           //To check all the cells which are at the right side of current cell
+        //To check all the cells which are at the right side of current cell
         private static void CheckRight(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
         {
             int length = PatientMatrix.GetLength(1);                            //the length of columns                
@@ -95,6 +95,35 @@ namespace MDPatientClusterer.Business
                 }
             }
         }
+
+
+        //To check all the cells which are at the top of current cell
+        private void CheckTop(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
+        {
+
+            for (int r = row - 1; r >= 0; r--)
+            {
+                if (PatientMatrix[r, col] == 1 && !IsVisited[r, col])            //if unvisited node found with value 1
+                {
+                    Node aNode = new Node();
+                    aNode.r = r;
+                    aNode.c = col;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();         //creating the dictionary key using the index  
+
+                    if (NodeToVisit.ContainsKey(aNode.key) == false)             //if not found in NodetoVisit Dictionary
+                    {
+                        aNode.IsVisited = false;
+                        NodeToVisit.Add(aNode.key, aNode);
+                    }                                                            //adding to dictionary to visit later.
+                }
+                else
+                {
+                    return;                                                      //if no more cells found with value 1 or went through all the cells
+                }
+            }
+        }
+
+
 
 
         public class Node
