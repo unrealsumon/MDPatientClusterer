@@ -14,7 +14,7 @@ namespace MDPatientClusterer.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok();
         }
 
         // GET api/values/5

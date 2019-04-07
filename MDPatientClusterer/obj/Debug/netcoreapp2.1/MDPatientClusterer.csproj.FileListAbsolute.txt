@@ -1,0 +1,14 @@
+D:\MDPatientClusterer\MDPatientClusterer\bin\Debug\netcoreapp2.1\MDPatientClusterer.deps.json
+D:\MDPatientClusterer\MDPatientClusterer\bin\Debug\netcoreapp2.1\MDPatientClusterer.runtimeconfig.json
+D:\MDPatientClusterer\MDPatientClusterer\bin\Debug\netcoreapp2.1\MDPatientClusterer.runtimeconfig.dev.json
+D:\MDPatientClusterer\MDPatientClusterer\bin\Debug\netcoreapp2.1\MDPatientClusterer.dll
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.csprojAssemblyReference.cache
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.csproj.CoreCompileInputs.cache
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.RazorAssemblyInfo.cache
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.RazorAssemblyInfo.cs
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.AssemblyInfoInputs.cache
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.AssemblyInfo.cs
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.RazorTargetAssemblyInfo.cache
+D:\MDPatientClusterer\MDPatientClusterer\bin\Debug\netcoreapp2.1\MDPatientClusterer.pdb
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.dll
+D:\MDPatientClusterer\MDPatientClusterer\obj\Debug\netcoreapp2.1\MDPatientClusterer.pdb
