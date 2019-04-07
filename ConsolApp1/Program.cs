@@ -8,24 +8,24 @@ namespace ConsolApp1
     {
         static void Main(string[] args)
         {
-            int[,] matrix = new int[5, 5];
+            int[,] matrix = new int[5, 10];
             Random random = new Random();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     matrix[i, j] = random.Next(0, 2);
                 }
             }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     if (matrix[i, j] == 1)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(matrix[i, j] + "  ");
                     }
                     else
@@ -34,11 +34,14 @@ namespace ConsolApp1
                         Console.Write(matrix[i, j] + "  ");
                     }
                 }
-
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(Environment.NewLine);
-
+              
+           
 
             }
+            string result = GetPatientGroups(matrix);
+            Console.WriteLine("Number of Clusters: " + result);
 
             Console.ReadKey();
         }
@@ -76,8 +79,16 @@ namespace ConsolApp1
                             {
                                 if (NodeToVisit[i].IsVisited == false)
                                 {
+                                    CheckLeft(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckRight(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckUp(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
 
-                                    
+                                    CheckDown(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckRightBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckRightUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+                                    CheckLeftUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
+
+                                    CheckLeftBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, ref NodeToVisit);
                                     NodeToVisit[i].IsVisited = true;
                                 }
                             }
