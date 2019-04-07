@@ -54,7 +54,7 @@ namespace ConsolApp1
             int colLen = p.GetLength(1);
             bool[,] visitedMatrix = new bool[rowLen, colLen];
             visitedMatrix.Initialize();
-            List<Node> NodeToVisit = new List<Node>();
+            Dictionary<string, Node> NodeToVisit = new Dictionary<string, Node>();
 
 
             for (int r = 0; r < rowLen; r++)
@@ -64,39 +64,44 @@ namespace ConsolApp1
                     if (p[r, c] == 1 && visitedMatrix[r, c] == false)
                     {
 
-                        var check = NodeToVisit.Where(x => x.index.c == c && x.index.r == r && x.IsVisited == true).FirstOrDefault();
-                        if (check == null)
+
+                        CheckRight(r, c, p, visitedMatrix, ref NodeToVisit);
+                        CheckDown(r, c, p, visitedMatrix, ref NodeToVisit);
+                        CheckRightBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
+                        CheckLeftBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
+                        visitedMatrix[r, c] = true;
+
+
+
+                        var keys = NodeToVisit.Keys.ToList();
+
+                        for (int i = 0; i < keys.Count; i++)
+
                         {
-                            CheckRight(r, c, p, visitedMatrix, ref NodeToVisit);
-                            CheckDown(r, c, p, visitedMatrix, ref NodeToVisit);
-                            CheckRightBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
-                            CheckLeftBottomCorner(r, c, p, visitedMatrix, ref NodeToVisit);
-                            visitedMatrix[r, c] = true;
+                            var key = keys[i];
 
-                            for (int i = 0; i < NodeToVisit.Count(); i++)
-
+                            if (NodeToVisit[key].IsVisited == false)
                             {
-                                if (NodeToVisit[i].IsVisited == false)
-                                {
 
-                                    CheckLeft(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    CheckRight(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    CheckUp(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                CheckLeft(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                CheckRight(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                CheckUp(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
 
-                                    CheckDown(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    CheckRightBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    CheckRightUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    CheckLeftUpperCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
+                                CheckDown(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                CheckRightBottomCorner(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                CheckRightUpperCorner(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                CheckLeftUpperCorner(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
 
-                                    CheckLeftBottomCorner(NodeToVisit[i].index.r, NodeToVisit[i].index.c, p, visitedMatrix, ref NodeToVisit);
-                                    NodeToVisit[i].IsVisited = true;
-                                    visitedMatrix[NodeToVisit[i].index.r, NodeToVisit[i].index.c] = true;
-
-                                }
+                                CheckLeftBottomCorner(NodeToVisit[key].r, NodeToVisit[key].c, p, visitedMatrix, ref NodeToVisit);
+                                NodeToVisit[key].IsVisited = true;
+                                visitedMatrix[NodeToVisit[key].r, NodeToVisit[key].c] = true;
+                                keys = NodeToVisit.Keys.ToList();
                             }
-                            count++;
-                            //Console.WriteLine(count);
                         }
+
+                        count++;
+
+
 
                     }
 
@@ -109,25 +114,25 @@ namespace ConsolApp1
 
 
 
-        private static void CheckRight(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckRight(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
         {
 
-            int colLen = p.GetLength(1);
+            int length = PatientMatrix.GetLength(1);
 
-            for (int i = c + 1; i < colLen; i++)
+
+            for (int c = col + 1; c < length; c++)
             {
-                if (p[r, i] == 1 && !IsVisited[r, i])
+                if (PatientMatrix[row, c] == 1 && !IsVisited[row, c])           //
                 {
-                    Index index = new Index();
                     Node aNode = new Node();
-                    index.r = r;
-                    index.c = i;
-                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                    if (check == null)
+                    aNode.r = row;
+                    aNode.c = c;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();
+
+                    if (NodeToVisit.ContainsKey(aNode.key) == false)
                     {
-                        aNode.index = index;
                         aNode.IsVisited = false;
-                        nodeToVisit.Add(aNode);
+                        NodeToVisit.Add(aNode.key, aNode);
                     }
                 }
                 else
@@ -135,30 +140,31 @@ namespace ConsolApp1
                     return;
                 }
             }
+
+
         }
 
 
 
 
-        private static void CheckLeft(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckLeft(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
         {
 
-            int colLen = p.GetLength(1);
 
-            for (int i = c - 1; i >= 0; i--)
+
+
+            for (int c = col - 1; c >= 0; c--)
             {
-                if (p[r, i] == 1 && IsVisited[r, i] == false)
+                if (PatientMatrix[row, c] == 1 && IsVisited[row, c] == false)      //if new unvisited node found
                 {
-                    Index index = new Index();
                     Node aNode = new Node();
-                    index.r = r;
-                    index.c = i;
-                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                    if (check == null)
+                    aNode.r = row;
+                    aNode.c = c;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();
+                    if (NodeToVisit.ContainsKey(aNode.key) == false)            //if not in Node to Visit Dictionary
                     {
-                        aNode.index = index;
                         aNode.IsVisited = false;
-                        nodeToVisit.Add(aNode);
+                        NodeToVisit.Add(aNode.key, aNode);                      //adding to dictionary to visit later.
                     }
                 }
                 else
@@ -166,12 +172,13 @@ namespace ConsolApp1
                     return;
                 }
             }
+
+
         }
 
 
 
-
-        private static void CheckDown(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckDown(int r, int c, int[,] p, bool[,] IsVisited, ref Dictionary<string, Node> nodeToVisit)
         {
             int rowLen = p.GetLength(0);
 
@@ -180,16 +187,16 @@ namespace ConsolApp1
             {
                 if (p[i, c] == 1 && !IsVisited[i, c])
                 {
-                    Index index = new Index();
+
                     Node aNode = new Node();
-                    index.r = i;
-                    index.c = c;
-                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                    if (check == null)
+                    aNode.r = i;
+                    aNode.c = c;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();
+                    if (nodeToVisit.ContainsKey(aNode.key) == false)
                     {
-                        aNode.index = index;
+
                         aNode.IsVisited = false;
-                        nodeToVisit.Add(aNode);
+                        nodeToVisit.Add(aNode.key, aNode);
                     }
                 }
                 else
@@ -199,59 +206,58 @@ namespace ConsolApp1
             }
         }
 
-        private static void CheckUp(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckUp(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
         {
-            int rowLen = p.GetLength(0);
 
 
-            for (int i = r - 1; i >= 0; i--)
+            for (int r = row - 1; r >= 0; r--)
             {
-                if (p[i, c] == 1 && !IsVisited[i, c])
+                if (PatientMatrix[r, col] == 1 && !IsVisited[r, col])            //if unvisited node found with value 1
                 {
-                    Index index = new Index();
                     Node aNode = new Node();
-                    index.r = i;
-                    index.c = c;
-                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                    if (check == null)
+                    aNode.r = r;
+                    aNode.c = col;
+                    aNode.key = aNode.r.ToString() + aNode.c.ToString();         //creating the dictionary key using the index  
+
+                    if (NodeToVisit.ContainsKey(aNode.key) == false)             //if not found in Node to Visit Dictionary
                     {
-                        aNode.index = index;
                         aNode.IsVisited = false;
-                        nodeToVisit.Add(aNode);
-                    }
+                        NodeToVisit.Add(aNode.key, aNode);
+                    }                                                            //adding to dictionary to visit later.
                 }
                 else
                 {
-                    return;
+                    return;                                                      //if no more cells found with value 1 or went through all the cells
                 }
             }
+
         }
 
 
 
-        private static void CheckRightBottomCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckRightBottomCorner(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
         {
 
-            int colLen = p.GetLength(1);
-            int rolLen = p.GetLength(0);
 
-            for (int i = c + 1; i < colLen; i++)
+            int colLen = PatientMatrix.GetLength(1);                                // getting the columns length        
+            int rowLen = PatientMatrix.GetLength(0);                                // getting the row length    
+
+            for (int c = col + 1; c < colLen; c++)                                  // start moving right from the current cell
             {
-                if (r < rolLen - 1)
+                if (row < rowLen - 1)                                               // stopping just before the last row
                 {
-                    r++;
-                    if (p[r, i] == 1 && !IsVisited[r, i])
+                    row++;
+                    if (PatientMatrix[row, c] == 1 && !IsVisited[row, c])           // if unvisited node found with value 1
                     {
-                        Index index = new Index();
                         Node aNode = new Node();
-                        index.r = r;
-                        index.c = i;
-                        var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                        if (check == null)
+                        aNode.r = row;
+                        aNode.c = c;
+                        aNode.key = aNode.r.ToString() + aNode.c.ToString();         //creating the dictionary key using the index  
+
+                        if (NodeToVisit.ContainsKey(aNode.key) == false)             //if not found in Node to Visit Dictionary
                         {
-                            aNode.index = index;
                             aNode.IsVisited = false;
-                            nodeToVisit.Add(aNode);
+                            NodeToVisit.Add(aNode.key, aNode);                       //adding to dictionary to visit later.
                         }
                     }
                     else
@@ -264,110 +270,110 @@ namespace ConsolApp1
                     return;
                 }
             }
+
         }
 
 
 
-        private static void CheckLeftBottomCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
+        private static void CheckLeftBottomCorner(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
+        {
+            int rowLen = PatientMatrix.GetLength(0);                                    // getting the row length    
+
+            for (int c = col - 1; c >= 0; c--)                                          // start moving left from the current cell
+            {
+                if (row < rowLen - 1)                                                   // stopping just before the last row
+                {
+                    row++;                                                              // moving to the next bottom row
+                    if (PatientMatrix[row, c] == 1 && !IsVisited[row, c])               // if unvisited node found with value 1
+                    {
+                        Node aNode = new Node();
+                        aNode.r = row;
+                        aNode.c = c;
+                        aNode.key = aNode.r.ToString() + aNode.c.ToString();             //creating the dictionary key using the index
+
+                        if (NodeToVisit.ContainsKey(aNode.key) == false)                 //if not found in NodetoVisit Dictionary
+                        {
+                            aNode.IsVisited = false;
+                            NodeToVisit.Add(aNode.key, aNode);                           //adding to dictionary to visit later.
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+
+        }
+
+
+
+        private static void CheckRightUpperCorner(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
+        {
+
+            int colLen = PatientMatrix.GetLength(1);                                 // getting the column length    
+
+            for (int c = col + 1; c < colLen; c++)                                   // start moving right from the current cell
+            {
+                if (row > 0)                                                         // stopping just before the last row
+                {
+                    row--;                                                           // moving to the previous row
+                    if (PatientMatrix[row, c] == 1 && !IsVisited[row, c])            // if unvisited node found with value 1
+                    {
+                        Node aNode = new Node();
+                        aNode.r = row;
+                        aNode.c = c;
+                        aNode.key = aNode.r.ToString() + aNode.c.ToString();          //creating the dictionary key using the index
+
+                        if (NodeToVisit.ContainsKey(aNode.key) == false)              //if not found in NodetoVisit Dictionary
+                        {
+                            aNode.IsVisited = false;
+                            NodeToVisit.Add(aNode.key, aNode);                        //adding to dictionary to visit later.
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+
+        }
+
+
+        private static void CheckLeftUpperCorner(int r, int c, int[,] p, bool[,] IsVisited, ref Dictionary<string, Node> nodeToVisit)
         {
 
             int colLen = p.GetLength(1);
             int rolLen = p.GetLength(0);
             for (int i = c - 1; i >= 0; i--)
             {
-                if (r < rolLen - 1)
-                {
-
-                    r++;
-                    if (p[r, i] == 1 && !IsVisited[r, i])
-                    {
-                        Index index = new Index();
-                        Node aNode = new Node();
-                        index.r = r;
-                        index.c = i;
-                        var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                        if (check == null)
-                        {
-                            aNode.index = index;
-                            aNode.IsVisited = false;
-                            nodeToVisit.Add(aNode);
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-
-
-
-        private static void CheckRightUpperCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
-        {
-
-            int colLen = p.GetLength(1);
-            int rolLen = p.GetLength(0);
-
-            for (int i = c + 1; i < colLen; i++)
-            {
-                if (r > 0)
-                {
-                    r--;
-                    if (p[r, i] == 1 && !IsVisited[r, i])
-                    {
-                        Index index = new Index();
-                        Node aNode = new Node();
-                        index.r = r;
-                        index.c = i;
-                        var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                        if (check == null)
-                        {
-                            aNode.index = index;
-                            aNode.IsVisited = false;
-                            nodeToVisit.Add(aNode);
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-
-
-        private static void CheckLeftUpperCorner(int r, int c, int[,] p, bool[,] IsVisited, ref List<Node> nodeToVisit)
-        {
-
-            int colLen = p.GetLength(1);
-            int rolLen = p.GetLength(0);
-            for (int i = c - 1; i >= 0; i--)
-            {
                 if (r > 0)
                 {
 
                     r--;
                     if (p[r, i] == 1 && !IsVisited[r, i])
                     {
-                        Index index = new Index();
+
                         Node aNode = new Node();
-                        index.r = r;
-                        index.c = i;
-                        var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
-                        if (check == null)
+                        aNode.r = r;
+                        aNode.c = i;
+                        aNode.key = aNode.r.ToString() + aNode.c.ToString();
+                        if (nodeToVisit.ContainsKey(aNode.key) == false)
                         {
-                            aNode.index = index;
+
                             aNode.IsVisited = false;
-                            nodeToVisit.Add(aNode);
+                            nodeToVisit.Add(aNode.key, aNode);
                         }
                     }
                     else
@@ -388,17 +394,13 @@ namespace ConsolApp1
 
 
     }
+
 
     public class Node
     {
+        public string key;
         public bool IsVisited;
-        public Index index;
-    }
-
-    public class Index
-    {
         public int r;
         public int c;
-
     }
 }
