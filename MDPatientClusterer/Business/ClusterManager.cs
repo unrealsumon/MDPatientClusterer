@@ -40,5 +40,15 @@ namespace MDPatientClusterer.Business
 
 
         }
+
+
+
+        public class Node
+        {
+            public string key;                                                  //concatenation of row and column.
+            public bool IsVisited;
+            public int r;                                                       //row
+            public int c;                                                       //column
+        }
     }
 }
