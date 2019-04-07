@@ -61,8 +61,10 @@ namespace ConsolApp1
 
                         var check = NodeToVisit.Where(x => x.index.c == c && x.index.r == r && x.IsVisited == true).FirstOrDefault();
                         if (check == null)
-                        {                              
-                         
+                        {
+                            CheckRight(r, c, p, ref NodeToVisit);
+                            CheckLeft(r, c, p, ref NodeToVisit);
+
                             for (int i = 0; i < NodeToVisit.Count(); i++)
                             {
                                 if (NodeToVisit[i].IsVisited == false)
@@ -93,6 +95,35 @@ namespace ConsolApp1
             int colLen = p.GetLength(1);
 
             for (int i = c + 1; i < colLen; i++)
+            {
+                if (p[r, i] == 1)
+                {
+                    Index index = new Index();
+                    Node aNode = new Node();
+                    index.r = r;
+                    index.c = i;
+                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
+                    if (check == null)
+                    {
+                        aNode.index = index;
+                        aNode.IsVisited = false;
+                        nodeToVisit.Add(aNode);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
+
+        private static void CheckLeft(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        {
+
+            int colLen = p.GetLength(1);
+
+            for (int i = c - 1; i >= 0; i--)
             {
                 if (p[r, i] == 1)
                 {
