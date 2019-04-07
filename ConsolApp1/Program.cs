@@ -64,6 +64,8 @@ namespace ConsolApp1
                         {
                             CheckRight(r, c, p, ref NodeToVisit);
                             CheckLeft(r, c, p, ref NodeToVisit);
+                            CheckDown(r, c, p, ref NodeToVisit);
+
 
                             for (int i = 0; i < NodeToVisit.Count(); i++)
                             {
@@ -145,6 +147,37 @@ namespace ConsolApp1
                 }
             }
         }
+
+
+
+        private static void CheckDown(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        {
+            int rowLen = p.GetLength(0);
+
+
+            for (int i = r + 1; i < rowLen; i++)
+            {
+                if (p[i, c] == 1)
+                {
+                    Index index = new Index();
+                    Node aNode = new Node();
+                    index.r = i;
+                    index.c = c;
+                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
+                    if (check == null)
+                    {
+                        aNode.index = index;
+                        aNode.IsVisited = false;
+                        nodeToVisit.Add(aNode);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
     }
 
     public class Node
