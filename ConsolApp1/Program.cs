@@ -84,6 +84,36 @@ namespace ConsolApp1
 
             return count.ToString(); ;
         }
+
+
+
+        private static void CheckRight(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        {
+
+            int colLen = p.GetLength(1);
+
+            for (int i = c + 1; i < colLen; i++)
+            {
+                if (p[r, i] == 1)
+                {
+                    Index index = new Index();
+                    Node aNode = new Node();
+                    index.r = r;
+                    index.c = i;
+                    var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
+                    if (check == null)
+                    {
+                        aNode.index = index;
+                        aNode.IsVisited = false;
+                        nodeToVisit.Add(aNode);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
     }
 
     public class Node
