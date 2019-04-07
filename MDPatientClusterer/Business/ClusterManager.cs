@@ -190,6 +190,43 @@ namespace MDPatientClusterer.Business
         }
 
 
+        //To check all the cells which are at the right upper corner of current cell
+        private static void CheckRightUpperCorner(int row, int col, int[,] PatientMatrix, bool[,] IsVisited, ref Dictionary<string, Node> NodeToVisit)
+        {
+
+            int colLen = PatientMatrix.GetLength(1);                                 // getting the column length    
+
+            for (int c = col + 1; c < colLen; c++)                                   // start moving right from the current cell
+            {
+                if (row > 0)                                                         // stopping just before the last row
+                {
+                    row--;                                                           // moving to the previous row
+                    if (PatientMatrix[row, c] == 1 && !IsVisited[row, c])            // if unvisited node found with value 1
+                    {
+                        Node aNode = new Node();
+                        aNode.r = row;
+                        aNode.c = c;
+                        aNode.key = aNode.r.ToString() + aNode.c.ToString();          //creating the dictionary key using the index
+
+                        if (NodeToVisit.ContainsKey(aNode.key) == false)              //if not found in NodetoVisit Dictionary
+                        {
+                            aNode.IsVisited = false;
+                            NodeToVisit.Add(aNode.key, aNode);                        //adding to dictionary to visit later.
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
+
 
         public class Node
         {
