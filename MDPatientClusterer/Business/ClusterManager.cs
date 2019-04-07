@@ -8,46 +8,46 @@ namespace MDPatientClusterer.Business
 {
     public class ClusterManager
     {
-        public int GetClusters(JObject PatientObj)
+        //returns the number of clusters in a matrix
+        public int GetClusters(/*JObject PatientObj,*/ int[,] TestMatrix)
         {
-            var PatientMatrix = ConvertJObjectTo2DArray(PatientObj);
-            int ClustCount = 0;
-            int RowSize = PatientMatrix.GetLength(0);
+            var PatientMatrix = TestMatrix;                                                             //for testing purpose
+            //var PatientMatrix = ConvertJObjectTo2DArray(PatientObj);                                    // Converting Json Object to 2D array
+            int ClustCount = 0;                                                                         // Cluster counter 
+            int RowSize = PatientMatrix.GetLength(0);                                                   
             int ColumnSize = PatientMatrix.GetLength(1);
-            bool[,] VisitedMatrix = new bool[RowSize, ColumnSize];
-            VisitedMatrix.Initialize();
-            Dictionary<string, Node> NodeToVisit = new Dictionary<string, Node>();
+            bool[,] VisitedMatrix = new bool[RowSize, ColumnSize];                                      // boolean matrix for tracking the visited nodes
+            VisitedMatrix.Initialize();                                                                 // Initialize the visited matrix as false
+            Dictionary<string, Node> NodeToVisit = new Dictionary<string, Node>();                      // List of Nodes will be visited.
 
             for (int r = 0; r < RowSize; r++)
             {
                 for (int c = 0; c < ColumnSize; c++)
                 {
-                    if (PatientMatrix[r, c] == 1 && VisitedMatrix[r, c] == false)
+                    if (PatientMatrix[r, c] == 1 && VisitedMatrix[r, c] == false)                       // if unvisited node found with value 1 
                     {
-                        CheckRight(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
-                        CheckDown(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
-                        CheckLeftBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
-                        CheckRightBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);
+                        CheckRight(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                // check the right neighbours until found a 0
+                        CheckDown(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);                 // check down neighbours unit found a 0
+                        CheckLeftBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);     // check bottom left corner neighbours until found a 0
+                        CheckRightBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);    // check bottom right corner neighbours until found a 0
 
-                        VisitedMatrix[r, c] = true;
+                        VisitedMatrix[r, c] = true;                                                     // mark the current node as visited 
+                        var keys = NodeToVisit.Keys.ToList();                                           // getting the keys (indexes) from dictionary
 
-
-                        var keys = NodeToVisit.Keys.ToList();
-
-                        for (int i = 0; i < keys.Count; i++)
+                        for (int i = 0; i < keys.Count; i++)                                            // search the dictionary using key
                         {
                             var key = keys[i];
-                            if (NodeToVisit[key].IsVisited == false)
+                            if (NodeToVisit[key].IsVisited == false)                                    // if the neighbour node is not visited yet
                             {
-                                SearchNeighbours(NodeToVisit[key].r, NodeToVisit[key].c, PatientMatrix, VisitedMatrix, ref NodeToVisit);             //To check all the neghbours of the current cell                      
+                                SearchNeighbours(NodeToVisit[key].r, NodeToVisit[key].c, PatientMatrix, VisitedMatrix, ref NodeToVisit);  // search neighbours           //To check all the neghbours of the current cell                      
 
-                                NodeToVisit[key].IsVisited = true;
-                                VisitedMatrix[NodeToVisit[key].r, NodeToVisit[key].c] = true;
-                                keys = NodeToVisit.Keys.ToList();
+                                NodeToVisit[key].IsVisited = true;                                      // update the dictionary node as visited
+                                VisitedMatrix[NodeToVisit[key].r, NodeToVisit[key].c] = true;           // update the current node of boolean matrix as visited 
+                                keys = NodeToVisit.Keys.ToList();                                       // update the key list while found new unvisited neighbours
                             }
                         }
 
-                        ClustCount++;
+                        ClustCount++;                                                                   // Cluster counter increments
 
                     }
 
@@ -55,7 +55,7 @@ namespace MDPatientClusterer.Business
             }
 
 
-            return ClustCount;
+            return ClustCount;                                                                          // return the number of cluster to controller
         }
 
         //To check all the neghbours of the current cell
@@ -71,6 +71,7 @@ namespace MDPatientClusterer.Business
             CheckLeftBottomCorner(r, c, PatientMatrix, VisitedMatrix, ref NodeToVisit);        // To check all the cells which are at the left upper corner of current cell
         }
 
+        //To convert the json object into 2D int array
         private int[,] ConvertJObjectTo2DArray(JObject PatientObj)
         {
             string key = "matrix";
