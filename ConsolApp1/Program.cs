@@ -66,8 +66,8 @@ namespace ConsolApp1
                             CheckLeft(r, c, p, ref NodeToVisit);
                             CheckDown(r, c, p, ref NodeToVisit);
                             CheckUp(r, c, p, ref NodeToVisit);
-                            CheckRightBottomCorner(r, c, p, ref NodeToVisit); 
-
+                            CheckRightBottomCorner(r, c, p, ref NodeToVisit);
+                            CheckLeftBottomCorner(r, c, p, ref NodeToVisit);
                             for (int i = 0; i < NodeToVisit.Count(); i++)
                             {
                                 if (NodeToVisit[i].IsVisited == false)
@@ -243,6 +243,46 @@ namespace ConsolApp1
                 }
             }
         }
+
+
+
+        private static void CheckLeftBottomCorner(int r, int c, int[,] p, ref List<Node> nodeToVisit)
+        {
+
+            int colLen = p.GetLength(1);
+            int rolLen = p.GetLength(0);
+            for (int i = c - 1; i >= 0; i--)
+            {
+                if (r < rolLen - 1)
+                {
+
+                    r++;
+                    if (p[r, i] == 1)
+                    {
+                        Index index = new Index();
+                        Node aNode = new Node();
+                        index.r = r;
+                        index.c = i;
+                        var check = nodeToVisit.Where(x => x.index.c == index.c && x.index.r == index.r).FirstOrDefault();
+                        if (check == null)
+                        {
+                            aNode.index = index;
+                            aNode.IsVisited = false;
+                            nodeToVisit.Add(aNode);
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
 
 
     }
